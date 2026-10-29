@@ -3,3 +3,5 @@
 # on October 30th.
 
 print("Hello World.")
+print("What do yall want to do for the project?")
+print("Any ideas?")
