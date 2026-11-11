@@ -38,4 +38,15 @@ def find_components(components, disable_id, health):
         
         valid_ids.add(comp_id)
     
-    #    
+    # Check and validate all listed dependencies against existing component 
+    # IDs.
+    
+    for comp in components:
+        for req_id in comp.get("requires", []):
+            if req_id not in valid_ids:
+                raise ValueError(
+                    f"Component '{comp['id']}' has an invalid dependency: \
+                    '{req_id}'"
+                )
+                
+    # 
