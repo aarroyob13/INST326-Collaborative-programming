@@ -49,7 +49,7 @@ def find_components(components, disable_id, health):
                     '{req_id}'"
                 )
                 
-    # Filter for elgible components:
+    # Filter for eligible components:
     avaliable = []
     
     for comp in components:
@@ -72,3 +72,9 @@ def find_components(components, disable_id, health):
         
     if all_reqs_met:
         avaliable.append(comp)
+        
+    # Sort eligible components by risk (ascending), then by ID (alphabetical)
+    avaliable.sort(key=lambda c: (c["risk"], c["id"]))
+    
+    return avaliable
+
