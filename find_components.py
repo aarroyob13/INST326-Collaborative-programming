@@ -49,4 +49,26 @@ def find_components(components, disable_id, health):
                     '{req_id}'"
                 )
                 
-    # 
+    # Filter for elgible components:
+    avaliable = []
+    
+    for comp in components:
+        comp_id = comp["id"]
+        
+    # Skip if already disabled
+    if comp_id in disabled_dis:
+        continue
+    
+    # Skip if player's current health is below the minimum requirement.
+    if health < comp["min_health"]:
+        continue
+    
+    # Check if all prerequisite components are in disabled_ids
+    all_reqs_met = True
+    for req_id in comp["requires"]:
+        if req_id not in disable_ids:
+            all_reqs_met = False
+            break
+        
+    if all_reqs_met:
+        avaliable.append(comp)
