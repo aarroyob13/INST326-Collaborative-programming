@@ -116,5 +116,59 @@ class TestFindComponents(unittest.TestCase):
         self.assertEqual(find_components(self.sample_components, all_ids,
                                          100), [])
         
+    def test_raises_on_duplicate_component_id(self):
+        """
+        
+        Raise a ValueError if two components share the same ID.
+        
+        """
+        
+        duplicate_comps = [
+            
+            {"id" : "firewall", "requires" : [], "risk" : 1, 
+             "min_health" : 10},
+            {"id" : "firewall", "requires" : [], "risk" : 2, 
+             "min_health" : 20},
+            
+        ]
+        
+        with self.assertRaises(ValueError):
+            find_components(duplicate_comps, set(), 100)
+            
+    def test_on_raise_or_invalid_id(self):
+        """
+        
+        Raise a ValueError if a component ID is not a string or blank.
+        
+        """
+        
+        blank_id = [{"id" : " ", "requires" : [], "risk" : 1, 
+                     "min_health" : 10}]
+        none_id = [{"id" : None, "requires" : [], "risk" : 1, 
+                     "min_health" : 10}]
+        
+        with self.assertRaises(ValueError):
+            find_components(blank_id, set(), 100)
+            
+        with self.assertRaises(ValueError):
+            find_components(none_id, set(), 100)
+            
+    def test_raises_on_nonexistent_dependency(self):
+        """
+        
+        Raise a ValueError if 'requires' reference is an unknown component ID.
+        
+        """
+        
+        bad_dependency = [
+            
+            {"id" : "firewall", "requires" : ["ghost_node"], "risk" : 1, 
+             "min_health" : 10}
+            
+        ]
+        
+        with self.assertRaises(ValueError):
+            find_components(bad_dependency, set(), 100)
+        
 if __name__ == "__main__":
     unittest.main()
