@@ -1,4 +1,4 @@
-def find_components(components, disable_id, health):
+def find_components(components, disabled_ids, health):
     """
     Find components and player's health status based on the given input.
     
@@ -55,26 +55,25 @@ def find_components(components, disable_id, health):
     for comp in components:
         comp_id = comp["id"]
         
-    # Skip if already disabled
-    if comp_id in disabled_dis:
-        continue
+        # Skip if already disabled
+        if comp_id in disabled_ids:
+            continue
     
-    # Skip if player's current health is below the minimum requirement.
-    if health < comp["min_health"]:
-        continue
+        # Skip if player's current health is below the minimum requirement.
+        if health < comp["min_health"]:
+            continue
     
-    # Check if all prerequisite components are in disabled_ids
-    all_reqs_met = True
-    for req_id in comp["requires"]:
-        if req_id not in disable_ids:
-            all_reqs_met = False
-            break
+        # Check if all prerequisite components are in disabled_ids
+        all_reqs_met = True
+        for req_id in comp["requires"]:
+            if req_id not in disabled_ids:
+                all_reqs_met = False
+                break
         
-    if all_reqs_met:
-        avaliable.append(comp)
+        if all_reqs_met:
+            avaliable.append(comp)
         
     # Sort eligible components by risk (ascending), then by ID (alphabetical)
     avaliable.sort(key=lambda c: (c["risk"], c["id"]))
     
     return avaliable
-
