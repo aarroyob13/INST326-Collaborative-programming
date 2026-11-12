@@ -38,5 +38,38 @@ class TestFindComponents(unittest.TestCase):
         result = find_components(self.sample_components, {"firewall"}, 60)
         result_ids = [comp["id"] for comp in result]
         
+    def test_tie_breaker_sorting_by_id(self):
+        """
+        
+        Components with equal risk are sorted alphabeticallly by ID.
+        
+        """
+        
+        comps = [
+            
+            {"id" : "zeta", "requires" : [], "risk" : 3, "min_health" : 10},
+            {"id" : "alpha", "requires" : [], "risk" : 3, "min_health" : 10},
+            {"id" : "beta", "requires" : [], "risk" : 3, "min_health" : 10}
+        ]
+        
+        result = find_components(comps, set(), 100)
+        self.assertEqual([c["id"] for c in result], ["alpha", "beta", "zeta"])
+        
+    def test_exact_min_health_boundary(self):
+        """
+        Component is avaliable when player health equals min_health.
+        """
+        
+        comps = [
+            
+            {"id" : "sensor", "requires" : [], "risk" : 1, "min_health" : 50}
+            
+        ]
+        
+        result = find_components(comps, set(), 50)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["id"], "sensor")
+        
+        
 if __name__ == "__main__":
     unittest.main()
