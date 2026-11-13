@@ -8,6 +8,9 @@ def _question_key(operator, left, right):
 
 def build_challenge_plan(round_number, recent_questions, count):
     """Generate arithmetic questions for the current round."""
+    if round_number < 1 or count < 1:
+        raise ValueError("Round number and question count must both be positive.")
+    
     max_operand = round_number * 5
     questions = []
     recent_keys = set()
