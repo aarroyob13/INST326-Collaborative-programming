@@ -10,11 +10,20 @@ def build_challenge_plan(round_number, recent_questions, count):
         left = random.randint(1, max_operand)
         right = random.randint(1, max_operand)
 
+        operator = random.choice(["+", "-", "*"])
+
+        if operator == "+":
+            answer = left + right
+        elif operator == "-":
+            answer = left - right
+        else:
+            answer = left * right
+
         questions.append({
-            "operator": "+",
+            "operator": operator,
             "left": left,
             "right": right,
-            "answer": left + right,
+            "answer": answer,
             "difficulty": round_number,
         })
 
