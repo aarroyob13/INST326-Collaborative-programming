@@ -1,13 +1,37 @@
 import random
 
 def _question_key(operator, left, right):
-    """Return a comparison key for an arithmetic question."""
+    """Put the smaller number first for addition and multiplication.
+
+    Keep the original order for subtraction so 5 - 3 and 3 - 5
+    count as different questions.
+    """
+    
     if operator in ("+", "*") and left > right:
         left, right = right, left
     return operator, left, right
 
 def build_challenge_plan(round_number, recent_questions, count):
-    """Generate arithmetic questions for the current round."""
+    """Make math questions for the current round.
+
+    Args:
+        round_number (int): The round number, starting at 1. The biggest
+            number in a question is the round number times 5.
+        recent_questions (list[tuple]): Questions used recently, written
+            as (operator, left, right) tuples.
+        count (int): How many questions to make.
+
+    Returns:
+        list[dict]: The questions for the round. Each has an operator,
+            two numbers, an answer, and a difficulty level. Questions
+            that haven't been used recently come first. If we run
+            through all the possible questions, we start the list over.
+
+    Raises:
+        ValueError: If the round number or question count is less than 1.
+    """
+
+
     if round_number < 1 or count < 1:
         raise ValueError("Round number and question count must both be positive.")
     
